@@ -32,6 +32,7 @@ export class CdkStack extends cdk.Stack {
           viewerProtocolPolicy:
             cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         },
+        defaultRootObject: "index.html",
         errorResponses: [
           {
             httpStatus: 404,
