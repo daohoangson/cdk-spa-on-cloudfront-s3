@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as cdk from "aws-cdk-lib";
-import { CdkStack } from "../lib/cdk-stack";
+import { CdkStack } from "../lib/cdk-stack.js";
 
 const app = new cdk.App();
 new CdkStack(app, "cdk-spa-on-cloudfront-s3", {
