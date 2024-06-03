@@ -9,6 +9,9 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: aws
+      url: ${{ steps.cdk.outputs.url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -24,4 +27,14 @@ jobs:
 
       - run: npm ci
 
-      - run: npx cdk deploy
+      - name: Run npx cdk deploy
+        id: cdk
+        run: |
+          set -e
+
+          npx cdk deploy \
+            --require-approval never \
+            --outputs-file /tmp/outputs.json 
+
+          _domainName=$(cat /tmp/outputs.json | jq -r '.["cdk-spa-on-cloudfront-s3"].CloudFrontDistributionDomainName')
+          echo "url=https://${_domainName}" >> $GITHUB_OUTPUT
