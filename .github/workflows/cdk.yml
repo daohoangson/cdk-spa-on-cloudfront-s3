@@ -27,12 +27,12 @@ jobs:
 
       - run: npm ci
 
-      - name: Run npx cdk deploy
+      - name: Run cdk deploy
         id: cdk
         run: |
           set -e
 
-          npx cdk deploy \
+          npm run deploy -- \
             --require-approval never \
             --outputs-file /tmp/outputs.json 
 
