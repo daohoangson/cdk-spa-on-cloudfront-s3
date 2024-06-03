@@ -1,0 +1,40 @@
+name: CDK
+on:
+  push:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: aws
+      url: ${{ steps.cdk.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::611714419758:role/GitHub
+          aws-region: us-east-1
+
+      - run: npm ci
+
+      - name: Run npx cdk deploy
+        id: cdk
+        run: |
+          set -e
+
+          npx cdk deploy \
+            --require-approval never \
+            --outputs-file /tmp/outputs.json 
+
+          _domainName=$(cat /tmp/outputs.json | jq -r '.["cdk-spa-on-cloudfront-s3"].CloudFrontDistributionDomainName')
+          echo "url=https://${_domainName}" >> $GITHUB_OUTPUT
