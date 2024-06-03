@@ -18,4 +18,6 @@ jobs:
           role-to-assume: arn:aws:iam::611714419758:role/GitHub
           aws-region: us-east-1
 
+      - run: npm install --global aws-cdk
+
       - run: npx cdk deploy
