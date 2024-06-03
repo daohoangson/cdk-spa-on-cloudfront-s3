@@ -12,12 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::611714419758:role/GitHub
           aws-region: us-east-1
 
-      - run: npm install --global aws-cdk
+      - run: npm ci
 
       - run: npx cdk deploy
