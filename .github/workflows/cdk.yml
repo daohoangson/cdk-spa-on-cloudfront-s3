@@ -36,5 +36,5 @@ jobs:
             --require-approval never \
             --outputs-file /tmp/outputs.json 
 
-          _domainName=$(cat /tmp/outputs.json | jq -r '.["cdk-spa-on-cloudfront-s3"].CloudFrontDistributionDomainName')
+          _domainName=$(cat /tmp/outputs.json | jq -r .SpaErrorResponses.DomainName)
           echo "url=https://${_domainName}" >> $GITHUB_OUTPUT
