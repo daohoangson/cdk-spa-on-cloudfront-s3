@@ -9,8 +9,13 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stack:
+          - SpaErrorResponses
+          - SpaWebHosting
     environment:
-      name: aws
+      name: ${{ matrix.stack }}
       url: ${{ steps.cdk.outputs.url }}
     steps:
       - uses: actions/checkout@v4
@@ -32,9 +37,7 @@ jobs:
         run: |
           set -e
 
-          npm run deploy -- \
-            --require-approval never \
-            --outputs-file /tmp/outputs.json 
+          npm run deploy -- ${{ matrix.stack }}
 
-          _domainName=$(cat /tmp/outputs.json | jq -r .SpaErrorResponses.DomainName)
+          _domainName=$(cat ./outputs.json | jq -r .${{ matrix.stack }}.DomainName)
           echo "url=https://${_domainName}" >> $GITHUB_OUTPUT

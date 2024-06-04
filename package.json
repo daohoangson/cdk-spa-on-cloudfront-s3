@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "deploy": "cdk deploy"
+    "deploy": "cdk deploy --outputs-file outputs.json --require-approval never"
   },
   "devDependencies": {
     "aws-cdk": "2.144.0"
